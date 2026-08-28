@@ -4,97 +4,104 @@ description = "Rust implementations of the Zcash primitives"
 version = "0.30.1"
 authors = [
     "Jack Grigg <jack@z.cash>",
-    "Kris Nuttycombe <kris@electriccoin.co>"
+    "Kris Nuttcombe <kris@electriccoin.co>"
 ]
 homepage = "https://github.com/zcash/librustzcash"
-repository.workspace = true
+repository = "https://github.com/zcashme/zns-zcash_primitives"
 readme = "README.md"
-license.workspace = true
-edition.workspace = true
-rust-version.workspace = true
-categories.workspace = true
+license = "MIT OR Apache-2.0"
+edition = "2024"
+rust-version = "1.88"
+categories = ["cryptography::cryptocurrencies"]
 
 [package.metadata.docs.rs]
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-equihash.workspace = true
-zcash_encoding.workspace = true
-zcash_protocol.workspace = true
-zcash_script.workspace = true
+equihash = { version = "0.3", default-features = false }
+zcash_encoding = { version = "0.4", default-features = false }
+zcash_protocol = { version = "0.10.5", default-features = false }
+zcash_script = { version = "0.4.3", default-features = false }
 
 # Dependencies exposed in a public API:
 # (Breaking upgrades to these require a breaking upgrade to this crate.)
 # - CSPRNG
-rand_core.workspace = true
+rand_core = { version = "0.6", default-features = false }
 
 # - Digests (output types exposed)
-blake2b_simd.workspace = true
-sha2.workspace = true
+blake2b_simd = { version = "1", default-features = false }
+sha2 = { version = "0.10", default-features = false }
 
 # - Logging and metrics
-memuse.workspace = true
+memuse = { version = "0.2.2", default-features = false }
 
 # - Shielded protocols
-ff.workspace = true
-jubjub.workspace = true
-nonempty.workspace = true
-orchard.workspace = true
-sapling.workspace = true
+ff = { version = "0.13", default-features = false }
+jubjub = "0.10"
+nonempty = { version = "0.11", default-features = false }
+# The ZNS fork of the orchard crate (`unsafe-zns`): Name Notes override the
+# standard note commitment so a note commits to a ZNS payload. The fork lives
+# at https://github.com/zcashme/orchard.
+orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.15.5", default-features = false, features = ["circuit"] }
+pasta_curves = { version = "0.5", optional = true }
+sapling = { package = "sapling-crypto", version = "0.7", default-features = false }
 
 # - Note Commitment Trees
-incrementalmerkletree = { workspace = true, features = ["legacy-api"] }
+incrementalmerkletree = { version = "0.8.2", default-features = false, features = ["legacy-api"] }
 
 # - Test dependencies
-proptest = { workspace = true, optional = true }
+proptest = { version = ">=1,<1.7", optional = true }
 
 # - Transparent protocol
-transparent.workspace = true
+transparent = { package = "zcash_transparent", version = "0.10.0", default-features = false }
 
 # - Transparent inputs
-block-buffer.workspace = true # remove after edition2024 upgrade
-crypto-common.workspace = true # remove after edition2024 upgrade
+block-buffer = { version = "=0.11.0-rc.3" } # remove after edition2024 upgrade
+crypto-common = { version = "=0.2.0-rc.1" } # remove after edition2024 upgrade
 #   - `SecretKey` and `PublicKey` types exposed
-secp256k1 = { workspace = true, optional = true }
+secp256k1 = { version = "0.29", default-features = false, features = ["alloc"], optional = true }
 
 # Dependencies used internally:
 # (Breaking upgrades to these are usually backwards-compatible, but check MSRVs.)
 # - Documentation
-document-features = { workspace = true, optional = true }
+document-features = { version = "0.2", optional = true }
 
 # - Encodings
-hex.workspace = true
+hex = { version = "0.4", default-features = false, features = ["alloc"] }
 
 # - Shielded protocols
-redjubjub.workspace = true
+redjubjub = { version = "0.8", default-features = false }
 
 # No-std support
-corez.workspace = true
+corez = { version = "0.1.1", default-features = false, features = ["alloc"] }
 
 [dependencies.zcash_note_encryption]
-workspace = true
+version = "0.4.1"
 features = ["pre-zip-212"]
 
 [dev-dependencies]
-bls12_381.workspace = true
+bls12_381 = "0.8"
 chacha20poly1305 = "0.10"
-criterion.workspace = true
-incrementalmerkletree = { workspace = true, features = ["legacy-api", "test-dependencies"] }
-proptest.workspace = true
-assert_matches.workspace = true
-rand_xorshift.workspace = true
-transparent = { workspace = true, features = ["test-dependencies"] }
-sapling = { workspace = true, features = ["test-dependencies"] }
-orchard = { workspace = true, features = ["test-dependencies"] }
-zcash_protocol = { workspace = true, features = ["local-consensus", "test-dependencies"] }
-zip32.workspace = true
+criterion = "0.5"
+incrementalmerkletree = { version = "0.8.2", features = ["legacy-api", "test-dependencies"] }
+proptest = ">=1,<1.7"
+assert_matches = "1.5"
+rand_xorshift = "0.3"
+transparent = { package = "zcash_transparent", version = "0.10.0", default-features = false, features = ["test-dependencies"] }
+sapling = { package = "sapling-crypto", version = "0.7", default-features = false, features = ["test-dependencies"] }
+orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.15.5", features = ["test-dependencies"] }
+zcash_protocol = { version = "0.10.5", features = ["local-consensus", "test-dependencies"] }
+zip32 = "0.2"
 
 [target.'cfg(unix)'.dev-dependencies]
 pprof = { version = "0.15", features = ["criterion", "flamegraph"] }
 
 [features]
 default = ["multicore", "std", "circuits"]
+## Enables ZNS Name Note composition (the `unsafe-zns` surface of the
+## orchard crate).
+unsafe-zns = ["orchard/unsafe-zns", "dep:pasta_curves"]
 std = [
     "document-features",
     "redjubjub/std",
@@ -149,8 +156,9 @@ harness = false
 # Needs `sapling::prover::mock`, which sapling gates behind its `circuit` feature.
 required-features = ["circuits"]
 
-[badges]
-maintenance = { status = "actively-developed" }
-
-[lints]
-workspace = true
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = [
+  'cfg(tokio_unstable)',
+  'cfg(zcash_unstable, values("nu7"))',
+  'cfg(live_network_tests)',
+] }

@@ -1182,6 +1182,49 @@ impl<P: consensus::Parameters, U> Builder<P, U> {
             .map_err(Error::IronwoodRecipient)
     }
 
+    /// Adds a ZNS Name Note spend — openings supplied by the caller (the
+    /// `unsafe-zns` surface of the orchard crate).
+    #[cfg(feature = "unsafe-zns")]
+    pub fn add_zns_spend<FE>(
+        &mut self,
+        fvk: orchard::keys::FullViewingKey,
+        note: orchard::Note,
+        merkle_path: orchard::tree::MerklePath,
+        rcm: orchard::note::NoteCommitTrapdoor,
+        psi: pasta_curves::pallas::Base,
+    ) -> Result<(), Error<FE>> {
+        self.ironwood_builder
+            .as_mut()
+            .ok_or(Error::IronwoodBuilderNotAvailable)?
+            .add_zns_spend(fvk, note, merkle_path, rcm, psi)
+            .map_err(Error::IronwoodSpend)
+    }
+
+    /// Adds a ZNS Name Note recipient — openings supplied by the caller.
+    #[cfg(feature = "unsafe-zns")]
+    pub fn add_zns_output<FE>(
+        &mut self,
+        ovk: Option<orchard::keys::OutgoingViewingKey>,
+        recipient: orchard::Address,
+        value: Zatoshis,
+        memo: [u8; 512],
+        rcm: orchard::note::NoteCommitTrapdoor,
+        psi: pasta_curves::pallas::Base,
+    ) -> Result<(), Error<FE>> {
+        self.ironwood_builder
+            .as_mut()
+            .ok_or(Error::IronwoodBuilderNotAvailable)?
+            .add_zns_output(
+                ovk,
+                recipient,
+                orchard::value::NoteValue::from_raw(value.into()),
+                memo,
+                rcm,
+                psi,
+            )
+            .map_err(Error::IronwoodRecipient)
+    }
+
     /// Adds a Sapling note to be spent in this transaction.
     ///
     /// Returns an error if the given Merkle path does not have the same anchor as the

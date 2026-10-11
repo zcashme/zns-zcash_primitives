@@ -14,6 +14,10 @@ workspace.
 
 ### Changed
 - Migrated to `zcash_transparent 0.11.0-pre.1`.
+- With `unsafe-zns`, `Builder::{add_zns_spend, add_zns_output}` now take
+  `orchard::note::Psi` instead of `pasta_curves::pallas::Base`; callers can
+  migrate existing ψ values with `Psi::from_inner` (zns-orchard
+  `zns-orchard-v0.16.0-pre.1`).
 
 ### Fixed
 - `zcash_primitives::merkle_tree::merkle_path_from_slice` now returns an error

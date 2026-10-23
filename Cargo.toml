@@ -1,7 +1,7 @@
 [package]
 name = "zcash_primitives"
 description = "Rust implementations of the Zcash primitives"
-version = "0.31.0-pre.1"
+version = "0.31.0"
 authors = [
     "Jack Grigg <jack@z.cash>",
     "Kris Nuttcombe <kris@electriccoin.co>"
@@ -11,7 +11,7 @@ repository = "https://github.com/zcashme/zns-zcash_primitives"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
 edition = "2024"
-rust-version = "1.88"
+rust-version = "1.89"
 categories = ["cryptography::cryptocurrencies"]
 
 [package.metadata.docs.rs]
@@ -21,7 +21,7 @@ rustdoc-args = ["--cfg", "docsrs"]
 [dependencies]
 equihash = { version = "0.3", default-features = false }
 zcash_encoding = { version = "0.5", default-features = false }
-zcash_protocol = { version = "=0.11.0-pre.0", default-features = false }
+zcash_protocol = { version = "0.11", default-features = false }
 zcash_script = { version = "0.6", default-features = false }
 
 # Dependencies exposed in a public API:
@@ -43,17 +43,17 @@ nonempty = { version = "0.11", default-features = false }
 # The ZNS fork of the orchard crate (`unsafe-zns`): Name Notes override the
 # standard note commitment so a note commits to a ZNS payload. The fork lives
 # at https://github.com/zcashme/orchard.
-orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.16.0-pre.1", default-features = false, features = ["circuit"] }
+orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.16.0", default-features = false, features = ["circuit"] }
 sapling = { package = "sapling-crypto", version = "0.9", default-features = false }
 
 # - Note Commitment Trees
 incrementalmerkletree = { version = "0.9", default-features = false, features = ["legacy-api"] }
 
 # - Test dependencies
-proptest = { version = ">=1,<1.7", optional = true }
+proptest = { version = "1.12", optional = true }
 
 # - Transparent protocol
-transparent = { package = "zcash_transparent", version = "=0.11.0-pre.1", default-features = false }
+transparent = { package = "zcash_transparent", version = "0.11", default-features = false }
 
 #   - `SecretKey` and `PublicKey` types exposed
 secp256k1 = { version = "0.33", default-features = false, features = ["alloc"], optional = true }
@@ -78,17 +78,16 @@ features = ["pre-zip-212"]
 
 [dev-dependencies]
 bls12_381 = "0.9"
-chacha20poly1305 = "0.10"
 criterion = "0.5"
 incrementalmerkletree = { version = "0.9", features = ["legacy-api", "test-dependencies"] }
-proptest = ">=1,<1.7"
+proptest = "1.12"
 assert_matches = "1.5"
 rand = { version = "0.10", features = ["sys_rng"] }
 rand_xorshift = "0.5"
-transparent = { package = "zcash_transparent", version = "=0.11.0-pre.1", default-features = false, features = ["test-dependencies"] }
+transparent = { package = "zcash_transparent", version = "0.11", default-features = false, features = ["test-dependencies"] }
 sapling = { package = "sapling-crypto", version = "0.9", default-features = false, features = ["test-dependencies"] }
-orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.16.0-pre.1", features = ["test-dependencies"] }
-zcash_protocol = { version = "=0.11.0-pre.0", features = ["local-consensus", "test-dependencies"] }
+orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.16.0", features = ["test-dependencies"] }
+zcash_protocol = { version = "0.11", features = ["local-consensus", "test-dependencies"] }
 zip32 = "0.3"
 
 [target.'cfg(unix)'.dev-dependencies]

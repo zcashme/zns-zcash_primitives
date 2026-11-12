@@ -43,7 +43,7 @@ nonempty = { version = "0.11", default-features = false }
 # The ZNS fork of the orchard crate (`unsafe-zns`): Name Notes override the
 # standard note commitment so a note commits to a ZNS payload. The fork lives
 # at https://github.com/zcashme/orchard.
-orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.16.0", default-features = false, features = ["circuit"] }
+orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.16.0.1", default-features = false, features = ["circuit"] }
 sapling = { package = "sapling-crypto", version = "0.9", default-features = false }
 
 # - Note Commitment Trees
@@ -86,7 +86,7 @@ rand = { version = "0.10", features = ["sys_rng"] }
 rand_xorshift = "0.5"
 transparent = { package = "zcash_transparent", version = "0.11", default-features = false, features = ["test-dependencies"] }
 sapling = { package = "sapling-crypto", version = "0.9", default-features = false, features = ["test-dependencies"] }
-orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.16.0", features = ["test-dependencies"] }
+orchard = { git = "https://github.com/zcashme/orchard.git", tag = "zns-orchard-v0.16.0.1", features = ["test-dependencies"] }
 zcash_protocol = { version = "0.11", features = ["local-consensus", "test-dependencies"] }
 zip32 = "0.3"
 

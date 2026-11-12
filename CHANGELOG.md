@@ -10,6 +10,13 @@ workspace.
 
 ## [Unreleased]
 
+### Changed
+- The orchard dependency is now zns-orchard `zns-orchard-v0.16.0.1`.
+
+### Removed
+- With `unsafe-zns`, `Builder::{add_zns_spend, add_zns_output}`. zns-orchard
+  `zns-orchard-v0.16.0.1` no longer builds or spends rcm/ψ Name Notes.
+
 ## [0.31.0] - 2026-10-21
 
 ### Added

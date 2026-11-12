@@ -1249,6 +1249,30 @@ impl<P: consensus::Parameters, U> Builder<P, U> {
             .map_err(Error::IronwoodRecipient)
     }
 
+    /// Adds an Ironwood recipient whose note is built from the given `rseed` instead of a
+    /// freshly sampled one (see `orchard::builder::Builder::add_output_with_rseed`).
+    #[cfg(feature = "unsafe-zns")]
+    pub fn add_ironwood_output_with_rseed<FE>(
+        &mut self,
+        ovk: Option<orchard::keys::OutgoingViewingKey>,
+        recipient: orchard::Address,
+        value: Zatoshis,
+        memo: MemoBytes,
+        rseed: orchard::note::RandomSeedBytes,
+    ) -> Result<(), Error<FE>> {
+        self.ironwood_builder
+            .as_mut()
+            .ok_or(Error::IronwoodBuilderNotAvailable)?
+            .add_output_with_rseed(
+                ovk,
+                recipient,
+                orchard::value::NoteValue::from_raw(value.into()),
+                memo.into_bytes(),
+                rseed,
+            )
+            .map_err(Error::IronwoodRecipient)
+    }
+
     /// Adds a Sapling note to be spent in this transaction.
     ///
     /// Returns an error if the given Merkle path does not have the same anchor as the

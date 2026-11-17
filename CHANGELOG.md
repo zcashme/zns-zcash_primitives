@@ -16,7 +16,8 @@ workspace.
   Notes.
 
 ### Changed
-- The orchard dependency is now zns-orchard `zns-orchard-v0.16.0.1`.
+- The orchard dependency is now zns-orchard `zns-orchard-v0.16.0.2`, which is
+  upstream orchard 0.16.0 plus `Builder::add_output_with_rseed`.
 
 ### Removed
 - With `unsafe-zns`, `Builder::{add_zns_spend, add_zns_output}`. zns-orchard
